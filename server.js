@@ -9,7 +9,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
 require ("./app.js");
-
 var port = process.env.PORT || 3000;
 console.log('listening');
 app.listen(port);
+
+var budgetModel = require('./models/budget.model.server');
+
+app.get('/api/budget', getBudget);
+
+function getBudget(req, res) {
+
+    console.log('server-side service fetching budget data');
+    budgetModel
+        .getBudget()
+        .then(function (budgets) {
+            res.json(budgets);
+        });
+
+}
