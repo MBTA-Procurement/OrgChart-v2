@@ -9,6 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
 require ("./app.js");
+//require ("public/app.js");
 
 var port = process.env.PORT || 8000;
 console.log('listening');
