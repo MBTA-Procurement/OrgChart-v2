@@ -3,6 +3,7 @@ var app = express();
 var fs = require('fs');
 var bodyParser = require('body-parser');
 var multer = require('multer'); // npm install multer --save
+var underscore = require('underscore');
 var upload = multer({dest: __dirname + '/public/uploads'});
 
 app.use(bodyParser.json());
@@ -59,27 +60,28 @@ function csvJSON(csvName) {
         + currentdate.getMinutes() + "."
         + currentdate.getSeconds();
     fs.rename(__dirname+ '/public/uploads/' + csvName, __dirname + '/public/csv/budgetdata.csv');
-    /*
-    var lines = csv.split("\n");
 
-    var result = [];
-
-    var headers = lines[0].split(",");
-
-    for (var i = 1; i < lines.length; i++) {
-
-        var obj = {};
-        var currentline = lines[i].split(",");
-
-        for (var j = 0; j < headers.length; j++) {
-            obj[headers[j]] = currentline[j];
-        }
-
-        result.push(obj);
-
-    }
-    console.log(JSON.stringify(result));
-    //return result; //JavaScript object
-    return JSON.stringify(result); //JSON
-    */
 }
+unflatten = function( array, parent, tree ){
+
+    tree = typeof tree !== 'undefined' ? tree : [];
+    parent = typeof parent !== 'undefined' ? parent : { id: 0 };
+
+    var children = underscore.filter( array, function(child){ return child.parentid == parent.id; });
+
+    if( !underscore.isEmpty( children )  ){
+        if( parent.id == 0 ){
+            tree = children;
+        }else{
+            parent['children'] = children;
+        }
+        underscore.each( children, function( child ){ unflatten( array, child ) } );
+    }
+console.log("done");
+    return tree;
+};
+
+var contents = fs.readFileSync("public/resources/reportsTo.json");
+// Define to JSON type
+var jsonContent = JSON.parse(contents);
+console.log(unflatten(jsonContent));
