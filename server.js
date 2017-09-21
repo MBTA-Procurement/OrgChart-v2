@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var multer = require('multer'); // npm install multer --save
 var underscore = require('underscore');
 var upload = multer({dest: __dirname + '/public/uploads'});
-
+var arrayToTree = require('array-to-tree');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -62,26 +62,21 @@ function csvJSON(csvName) {
     fs.rename(__dirname+ '/public/uploads/' + csvName, __dirname + '/public/csv/budgetdata.csv');
 
 }
-unflatten = function( array, parent, tree ){
-
-    tree = typeof tree !== 'undefined' ? tree : [];
-    parent = typeof parent !== 'undefined' ? parent : { id: 0 };
-
-    var children = underscore.filter( array, function(child){ return child.parentid == parent.id; });
-
-    if( !underscore.isEmpty( children )  ){
-        if( parent.id == 0 ){
-            tree = children;
-        }else{
-            parent['children'] = children;
-        }
-        underscore.each( children, function( child ){ unflatten( array, child ) } );
-    }
-console.log("done");
-    return tree;
-};
-
+/*
 var contents = fs.readFileSync("public/resources/reportsTo.json");
 // Define to JSON type
 var jsonContent = JSON.parse(contents);
-console.log(unflatten(jsonContent));
+
+var tree = arrayToTree(jsonContent, {
+    parentProperty: 'parent'
+});
+var treeString = JSON.stringify(tree);
+
+fs.writeFile("C:/Users/noldakowski/Desktop/tree.json", treeString, 'utf8', function (err) {
+    if (err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+});
+*/
