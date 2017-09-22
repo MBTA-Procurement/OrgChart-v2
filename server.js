@@ -16,10 +16,12 @@ require("./app.js");
 var port = process.env.PORT || 3000;
 console.log('listening');
 app.listen(port);
+app.get('/api/budget', getBudget);
 
+app.post("/api/upload/image", upload.single('myFile'), uploadFile);
+app.post("/api/upload/p", upload.single('myFile'), uploadFileProcurement);
 var budgetModel = require('./models/budget.model.server');
 
-app.get('/api/budget', getBudget);
 
 
 function getBudget(req, res) {
@@ -33,20 +35,30 @@ function getBudget(req, res) {
 
 }
 
-app.post("/api/upload/image", upload.single('myFile'), uploadFile);
+
+function uploadFileProcurement(req, res) {
+    console.log('uploading procurement');
+    var myFile = req.file;
+    console.log(myFile);
+    csvJSON2(myFile.filename);
+    //}
+    var callbackUrl = "/#!/procurement";
+    console.log(callbackUrl);
+    res.redirect(callbackUrl);
+}
 
 function uploadFile(req, res) {
     console.log('uploading');
     var myFile = req.file;
     console.log(myFile);
-    /* if (myFile.originalname.substr(myFile.originalname.length - 3) == "csv") {
-         console.log('tis a csv'); */
     csvJSON(myFile.filename);
     //}
     var callbackUrl = "/#!";
     console.log(callbackUrl);
     res.redirect(callbackUrl);
 }
+
+
 
 //var csv is the CSV file with headers
 function csvJSON(csvName) {
@@ -62,21 +74,17 @@ function csvJSON(csvName) {
     fs.rename(__dirname+ '/public/uploads/' + csvName, __dirname + '/public/csv/budgetdata.csv');
 
 }
-/*
-var contents = fs.readFileSync("public/resources/reportsTo.json");
-// Define to JSON type
-var jsonContent = JSON.parse(contents);
 
-var tree = arrayToTree(jsonContent, {
-    parentProperty: 'parent'
-});
-var treeString = JSON.stringify(tree);
+function csvJSON2(csvName) {
+    console.log('csv converting!');
+    console.log(csvName);
+    var currentdate = new Date();
+    var datetime = "" + currentdate.getDate() + "."
+        + (currentdate.getMonth()+1)  + "."
+        + currentdate.getFullYear() + "_"
+        + currentdate.getHours() + "."
+        + currentdate.getMinutes() + "."
+        + currentdate.getSeconds();
+    fs.rename(__dirname+ '/public/uploads/' + csvName, __dirname + '/public/csv/procurementdata.csv');
 
-fs.writeFile("C:/Users/noldakowski/Desktop/tree.json", treeString, 'utf8', function (err) {
-    if (err) {
-        return console.log(err);
-    }
-
-    console.log("The file was saved!");
-});
-*/
+}
