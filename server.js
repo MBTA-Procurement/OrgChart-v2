@@ -20,6 +20,10 @@ app.get('/api/budget', getBudget);
 
 app.post("/api/upload/image", upload.single('myFile'), uploadFile);
 app.post("/api/upload/p", upload.single('myFile'), uploadFileProcurement);
+app.post("/api/upload/odepartments", upload.single('myFile'), uploadFileODepartments);
+app.post("/api/upload/adepartments", upload.single('myFile'), uploadFileADepartments);
+app.post("/api/upload/oemployees", upload.single('myFile'), uploadFileOEmployees);
+app.post("/api/upload/aemployees", upload.single('myFile'), uploadFileAEmployees);
 var budgetModel = require('./models/budget.model.server');
 
 
@@ -34,7 +38,78 @@ function getBudget(req, res) {
         });
 
 }
+function uploadFileOEmployees(req, res) {
+    console.log('uploading employees');
+    var myFile = req.file;
+    console.log(myFile);
+    var currentdate = new Date();
+    var datetime = "" + currentdate.getDate() + "."
+        + (currentdate.getMonth()+1)  + "."
+        + currentdate.getFullYear() + "_"
+        + currentdate.getHours() + "."
+        + currentdate.getMinutes() + "."
+        + currentdate.getSeconds();
+    fs.rename(__dirname+ '/public/uploads/' + myFile.filename, __dirname + '/public/resources/operatingEmployees.json');
 
+    var callbackUrl = "/#!";
+    console.log(callbackUrl);
+    res.redirect(callbackUrl);
+}
+
+
+function uploadFileAEmployees(req, res) {
+    console.log('uploading employees');
+    var myFile = req.file;
+    console.log(myFile);
+    var currentdate = new Date();
+    var datetime = "" + currentdate.getDate() + "."
+        + (currentdate.getMonth()+1)  + "."
+        + currentdate.getFullYear() + "_"
+        + currentdate.getHours() + "."
+        + currentdate.getMinutes() + "."
+        + currentdate.getSeconds();
+    fs.rename(__dirname+ '/public/uploads/' + myFile.filename, __dirname + '/public/resources/OrgChartExcel.json');
+
+    var callbackUrl = "/#!";
+    console.log(callbackUrl);
+    res.redirect(callbackUrl);
+}
+
+function uploadFileADepartments(req, res) {
+    console.log('uploading departments');
+    var myFile = req.file;
+    console.log(myFile);
+    var currentdate = new Date();
+    var datetime = "" + currentdate.getDate() + "."
+        + (currentdate.getMonth()+1)  + "."
+        + currentdate.getFullYear() + "_"
+        + currentdate.getHours() + "."
+        + currentdate.getMinutes() + "."
+        + currentdate.getSeconds();
+    fs.rename(__dirname+ '/public/uploads/' + myFile.filename, __dirname + '/public/resources/flare_experiment_2.json');
+
+    var callbackUrl = "/#!";
+    console.log(callbackUrl);
+    res.redirect(callbackUrl);
+}
+
+function uploadFileODepartments(req, res) {
+    console.log('uploading departments');
+    var myFile = req.file;
+    console.log(myFile);
+    var currentdate = new Date();
+    var datetime = "" + currentdate.getDate() + "."
+        + (currentdate.getMonth()+1)  + "."
+        + currentdate.getFullYear() + "_"
+        + currentdate.getHours() + "."
+        + currentdate.getMinutes() + "."
+        + currentdate.getSeconds();
+    fs.rename(__dirname+ '/public/uploads/' + myFile.filename, __dirname + '/public/resources/flare_experiment.json');
+
+    var callbackUrl = "/#!";
+    console.log(callbackUrl);
+    res.redirect(callbackUrl);
+}
 
 function uploadFileProcurement(req, res) {
     console.log('uploading procurement');
