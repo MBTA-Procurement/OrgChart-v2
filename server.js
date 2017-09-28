@@ -23,129 +23,65 @@ app.post("/api/upload/odepartments", upload.single('myFile'), uploadFileODepartm
 app.post("/api/upload/adepartments", upload.single('myFile'), uploadFileADepartments);
 app.post("/api/upload/oemployees", upload.single('myFile'), uploadFileOEmployees);
 app.post("/api/upload/aemployees", upload.single('myFile'), uploadFileAEmployees);
+app.post("/api/upload/kpi", upload.single('myFile'), uploadFileKPI);
 
 function uploadFileOEmployees(req, res) {
-    console.log('uploading employees');
     var myFile = req.file;
-    console.log(myFile);
-    var currentdate = new Date();
-    var datetime = "" + currentdate.getDate() + "."
-        + (currentdate.getMonth()+1)  + "."
-        + currentdate.getFullYear() + "_"
-        + currentdate.getHours() + "."
-        + currentdate.getMinutes() + "."
-        + currentdate.getSeconds();
     fs.rename(__dirname+ '/public/uploads/' + myFile.filename, __dirname + '/public/resources/operatingEmployees.json');
-
     var callbackUrl = "/#!/employees";
-    console.log(callbackUrl);
     res.redirect(callbackUrl);
 }
 
 
 function uploadFileAEmployees(req, res) {
-    console.log('uploading employees');
     var myFile = req.file;
-    console.log(myFile);
-    var currentdate = new Date();
-    var datetime = "" + currentdate.getDate() + "."
-        + (currentdate.getMonth()+1)  + "."
-        + currentdate.getFullYear() + "_"
-        + currentdate.getHours() + "."
-        + currentdate.getMinutes() + "."
-        + currentdate.getSeconds();
     fs.rename(__dirname+ '/public/uploads/' + myFile.filename, __dirname + '/public/resources/OrgChartExcel.json');
-
     var callbackUrl = "/#!/employees";
-    console.log(callbackUrl);
     res.redirect(callbackUrl);
 }
 
 function uploadFileADepartments(req, res) {
-    console.log('uploading departments');
     var myFile = req.file;
-    console.log(myFile);
-    var currentdate = new Date();
-    var datetime = "" + currentdate.getDate() + "."
-        + (currentdate.getMonth()+1)  + "."
-        + currentdate.getFullYear() + "_"
-        + currentdate.getHours() + "."
-        + currentdate.getMinutes() + "."
-        + currentdate.getSeconds();
     fs.rename(__dirname+ '/public/uploads/' + myFile.filename, __dirname + '/public/resources/flare_experiment_2.json');
-
     var callbackUrl = "/#!";
-    console.log(callbackUrl);
     res.redirect(callbackUrl);
 }
 
 function uploadFileODepartments(req, res) {
-    console.log('uploading departments');
     var myFile = req.file;
-    console.log(myFile);
-    var currentdate = new Date();
-    var datetime = "" + currentdate.getDate() + "."
-        + (currentdate.getMonth()+1)  + "."
-        + currentdate.getFullYear() + "_"
-        + currentdate.getHours() + "."
-        + currentdate.getMinutes() + "."
-        + currentdate.getSeconds();
     fs.rename(__dirname+ '/public/uploads/' + myFile.filename, __dirname + '/public/resources/flare_experiment.json');
-
     var callbackUrl = "/#!";
-    console.log(callbackUrl);
     res.redirect(callbackUrl);
 }
 
 function uploadFileProcurement(req, res) {
-    console.log('uploading procurement');
     var myFile = req.file;
-    console.log(myFile);
     csvJSON2(myFile.filename);
-    //}
     var callbackUrl = "/#!/procurement";
-    console.log(callbackUrl);
     res.redirect(callbackUrl);
 }
 
 function uploadFile(req, res) {
-    console.log('uploading');
     var myFile = req.file;
-    console.log(myFile);
     csvJSON(myFile.filename);
-    //}
     var callbackUrl = "/#!";
-    console.log(callbackUrl);
     res.redirect(callbackUrl);
 }
 
-
+function uploadFileKPI(req, res) {
+    var myFile = req.file;
+    fs.rename(__dirname+ '/public/uploads/' + myFile.filename, __dirname + '/public/resources/kpitodept.json');
+    var callbackUrl = "/#!/kpi";
+    res.redirect(callbackUrl);
+}
 
 //var csv is the CSV file with headers
 function csvJSON(csvName) {
-    console.log('csv converting!');
-    console.log(csvName);
-    var currentdate = new Date();
-    var datetime = "" + currentdate.getDate() + "."
-        + (currentdate.getMonth()+1)  + "."
-        + currentdate.getFullYear() + "_"
-        + currentdate.getHours() + "."
-        + currentdate.getMinutes() + "."
-        + currentdate.getSeconds();
     fs.rename(__dirname+ '/public/uploads/' + csvName, __dirname + '/public/csv/budgetdata.csv');
 
 }
 
 function csvJSON2(csvName) {
-    console.log('csv converting!');
-    console.log(csvName);
-    var currentdate = new Date();
-    var datetime = "" + currentdate.getDate() + "."
-        + (currentdate.getMonth()+1)  + "."
-        + currentdate.getFullYear() + "_"
-        + currentdate.getHours() + "."
-        + currentdate.getMinutes() + "."
-        + currentdate.getSeconds();
     fs.rename(__dirname+ '/public/uploads/' + csvName, __dirname + '/public/csv/procurementdata.csv');
 
 }
