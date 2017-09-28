@@ -16,7 +16,6 @@ require("./app.js");
 var port = process.env.PORT || 3000;
 console.log('listening');
 app.listen(port);
-app.get('/api/budget', getBudget);
 
 app.post("/api/upload/image", upload.single('myFile'), uploadFile);
 app.post("/api/upload/p", upload.single('myFile'), uploadFileProcurement);
@@ -24,20 +23,7 @@ app.post("/api/upload/odepartments", upload.single('myFile'), uploadFileODepartm
 app.post("/api/upload/adepartments", upload.single('myFile'), uploadFileADepartments);
 app.post("/api/upload/oemployees", upload.single('myFile'), uploadFileOEmployees);
 app.post("/api/upload/aemployees", upload.single('myFile'), uploadFileAEmployees);
-var budgetModel = require('./models/budget.model.server');
 
-
-
-function getBudget(req, res) {
-
-    console.log('server-side service fetching budget data');
-    budgetModel
-        .getBudget()
-        .then(function (budgets) {
-            res.json(budgets);
-        });
-
-}
 function uploadFileOEmployees(req, res) {
     console.log('uploading employees');
     var myFile = req.file;
@@ -51,7 +37,7 @@ function uploadFileOEmployees(req, res) {
         + currentdate.getSeconds();
     fs.rename(__dirname+ '/public/uploads/' + myFile.filename, __dirname + '/public/resources/operatingEmployees.json');
 
-    var callbackUrl = "/#!";
+    var callbackUrl = "/#!/employees";
     console.log(callbackUrl);
     res.redirect(callbackUrl);
 }
@@ -70,7 +56,7 @@ function uploadFileAEmployees(req, res) {
         + currentdate.getSeconds();
     fs.rename(__dirname+ '/public/uploads/' + myFile.filename, __dirname + '/public/resources/OrgChartExcel.json');
 
-    var callbackUrl = "/#!";
+    var callbackUrl = "/#!/employees";
     console.log(callbackUrl);
     res.redirect(callbackUrl);
 }
