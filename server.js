@@ -14,7 +14,6 @@ app.use(express.static(__dirname + '/public'));
 
 require("./app.js");
 var port = process.env.PORT || 3000;
-console.log('listening');
 app.listen(port);
 
 app.post("/api/upload/image", upload.single('myFile'), uploadFile);
