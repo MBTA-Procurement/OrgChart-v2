@@ -16,6 +16,7 @@ require("./app.js");
 var port = process.env.PORT || 3000;
 app.listen(port);
 
+app.get("/api/vendor-list",getFiles);
 app.post("/api/upload/image", upload.single('myFile'), uploadFile);
 app.post("/api/upload/p", upload.single('myFile'), uploadFileProcurement);
 app.post("/api/upload/odepartments", upload.single('myFile'), uploadFileODepartments);
@@ -23,19 +24,32 @@ app.post("/api/upload/adepartments", upload.single('myFile'), uploadFileADepartm
 app.post("/api/upload/oemployees", upload.single('myFile'), uploadFileOEmployees);
 app.post("/api/upload/aemployees", upload.single('myFile'), uploadFileAEmployees);
 app.post("/api/upload/kpi", upload.single('myFile'), uploadFileKPI);
-
+app.post("/api/upload/vendorData", upload.single('myFile'), uploadFileVendor);
 function uploadFileOEmployees(req, res) {
     var myFile = req.file;
     fs.rename(__dirname+ '/public/uploads/' + myFile.filename, __dirname + '/public/resources/operatingEmployees.json');
     var callbackUrl = "/#!/employees";
     res.redirect(callbackUrl);
 }
-
+function getFiles(req, res){
+    console.log('getting file list');
+    var files = fs.readdirSync(__dirname+'/public/vendor-data');
+    console.log(files);
+    res.send(files);
+}
 
 function uploadFileAEmployees(req, res) {
     var myFile = req.file;
     fs.rename(__dirname+ '/public/uploads/' + myFile.filename, __dirname + '/public/resources/OrgChartExcel.json');
     var callbackUrl = "/#!/employees";
+    res.redirect(callbackUrl);
+}
+
+function uploadFileVendor(req, res) {
+    var vendorName = req.body.vendorName;
+    var myFile = req.file;
+    fs.rename(__dirname+ '/public/uploads/' + myFile.filename, __dirname + '/public/vendor-data/'+vendorName+'.csv');
+    var callbackUrl = "/#!/vendor/"+vendorName;
     res.redirect(callbackUrl);
 }
 
