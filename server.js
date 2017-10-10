@@ -48,6 +48,7 @@ function uploadFileAEmployees(req, res) {
 }
 
 function uploadFileVendor(req, res) {
+    console.log(req.body);
     var vendorName = req.body.vendorName;
     var deptNo = true;
     var year = false;
@@ -57,6 +58,7 @@ function uploadFileVendor(req, res) {
     var field1 = undefined;
     var operation = undefined;
     var field2 = undefined;
+    var vars = [];
     if (req.body.year != undefined) {
         year = true;
     }
@@ -78,6 +80,36 @@ function uploadFileVendor(req, res) {
     if (req.body.field2 != undefined) {
         field2 = req.body.field2;
     }
+    if (req.body.var1 != undefined) {
+        vars.push(req.body.var1);
+    }
+    if (req.body.var2 != undefined) {
+        vars.push(req.body.var2);
+    }
+    if (req.body.var3 != undefined) {
+        vars.push(req.body.var3);
+    }
+    if (req.body.var4 != undefined) {
+        vars.push(req.body.var4);
+    }
+    if (req.body.var5 != undefined) {
+        vars.push(req.body.var5);
+    }
+    if (req.body.var6 != undefined) {
+        vars.push(req.body.var6);
+    }
+    if (req.body.var7 != undefined) {
+        vars.push(req.body.var7);
+    }
+    if (req.body.var8 != undefined) {
+        vars.push(req.body.var8);
+    }
+    if (req.body.var9 != undefined) {
+        vars.push(req.body.var9);
+    }
+    if (req.body.var10 != undefined) {
+        vars.push(req.body.var10);
+    }
     var config = {
         "deptNo": deptNo,
         "year": year,
@@ -86,11 +118,13 @@ function uploadFileVendor(req, res) {
         "extra": extra,
         "field1": field1,
         "operation": operation,
-        "field2": field2
+        "field2": field2,
+        "vars": vars
     };
+    console.log(config);
     var myFile = req.file;
     fs.rename(__dirname + '/public/uploads/' + myFile.filename, __dirname + '/public/vendor-data/' + vendorName + '.csv');
-    fs.writeFile(__dirname + '/public/vendor-data/configuration/' + vendorName+"_config.json", JSON.stringify(config));
+    fs.writeFile(__dirname + '/public/vendor-data/configuration/' + vendorName + "_config.json", JSON.stringify(config));
     var callbackUrl = "/#!/vendor/" + vendorName;
     res.redirect(callbackUrl);
 }
