@@ -80,35 +80,47 @@ function uploadFileVendor(req, res) {
     if (req.body.field2 != undefined) {
         field2 = req.body.field2;
     }
+    var f = {"name": "", "value": ""};
     if (req.body.var1 != undefined) {
-        vars.push(req.body.var1);
+        f = {"name": req.body.varDesc1, "value": req.body.var1};
+        console.log(f);
+        vars.push(f);
     }
     if (req.body.var2 != undefined) {
-        vars.push(req.body.var2);
+        f = {"name": req.body.varDesc2, "value": req.body.var2};
+        vars.push(f);
     }
     if (req.body.var3 != undefined) {
-        vars.push(req.body.var3);
+        f = {"name": req.body.varDesc3, "value": req.body.var3};
+        vars.push(f);
     }
     if (req.body.var4 != undefined) {
-        vars.push(req.body.var4);
+        f = {"name": req.body.varDesc4, "value": req.body.var4};
+        vars.push(f);
     }
     if (req.body.var5 != undefined) {
-        vars.push(req.body.var5);
+        f = {"name": req.body.varDesc5, "value": req.body.var5};
+        vars.push(f);
     }
     if (req.body.var6 != undefined) {
-        vars.push(req.body.var6);
+        f = {"name": req.body.varDesc6, "value": req.body.var6};
+        vars.push(f);
     }
     if (req.body.var7 != undefined) {
-        vars.push(req.body.var7);
+        f = {"name": req.body.varDesc7, "value": req.body.var7};
+        vars.push(f);
     }
     if (req.body.var8 != undefined) {
-        vars.push(req.body.var8);
+        f = {"name": req.body.varDesc8, "value": req.body.var8};
+        vars.push(f);
     }
     if (req.body.var9 != undefined) {
-        vars.push(req.body.var9);
+        f = {"name": req.body.varDesc9, "value": req.body.var9};
+        vars.push(f);
     }
     if (req.body.var10 != undefined) {
-        vars.push(req.body.var10);
+        f = {"name": req.body.varDesc10, "value": req.body.var10};
+        vars.push(f);
     }
     var config = {
         "deptNo": deptNo,
@@ -121,10 +133,20 @@ function uploadFileVendor(req, res) {
         "field2": field2,
         "vars": vars
     };
-    console.log(config);
+
     var myFile = req.file;
+    var options = {};
+    for (var p = 0; p < config.vars.length; p++) {
+        console.log("OPTIONS");
+        console.log(config.vars[p].value);
+        options[config.vars[p].value] = {"display": true, "money": false, "view": "values"};
+        console.log(options);
+    }
+    console.log(options);
     fs.rename(__dirname + '/public/uploads/' + myFile.filename, __dirname + '/public/vendor-data/' + vendorName + '.csv');
     fs.writeFile(__dirname + '/public/vendor-data/configuration/' + vendorName + "_config.json", JSON.stringify(config));
+    fs.writeFile(__dirname + '/public/vendor-data/tooltip/' + vendorName + "_tooltip-config.json", JSON.stringify(options));
+
     var callbackUrl = "/#!/vendor/" + vendorName;
     res.redirect(callbackUrl);
 }
