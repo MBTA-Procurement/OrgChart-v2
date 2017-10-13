@@ -25,6 +25,8 @@ app.post("/api/upload/oemployees", upload.single('myFile'), uploadFileOEmployees
 app.post("/api/upload/aemployees", upload.single('myFile'), uploadFileAEmployees);
 app.post("/api/upload/kpi", upload.single('myFile'), uploadFileKPI);
 app.post("/api/upload/vendorData", upload.single('myFile'), uploadFileVendor);
+app.post("/api/upload/vendorOptions", upload.single('myFile'), uploadVendorOptions);
+
 
 function uploadFileOEmployees(req, res) {
     var myFile = req.file;
@@ -45,6 +47,43 @@ function uploadFileAEmployees(req, res) {
     fs.rename(__dirname + '/public/uploads/' + myFile.filename, __dirname + '/public/resources/OrgChartExcel.json');
     var callbackUrl = "/#!/employees";
     res.redirect(callbackUrl);
+}
+
+function uploadVendorOptions(req, res) {
+    console.log(req.body);
+    console.log(req);
+    var tooltipConfig = JSON.parse(fs.readFileSync(__dirname + '/public/vendor-data/tooltip/' + req.body.vendorName + "_tooltip-config.json", 'utf8'));
+    var futureFile = {};
+    for (x in tooltipConfig) {
+        var elt = {};
+        var displayName = "display" + x;
+        var viewName = "view" + x;
+        var moneyName = "money" + x;
+        elt[x] = {};
+        if (req.body[displayName] !== undefined) {
+            if (req.body[displayName] === 'on') {
+                elt[x].display = true;
+            }
+        }
+        else {
+            elt[x].display = false;
+        }
+        if (req.body[viewName] !== undefined) {
+            elt[x].view = req.body[viewName];
+        }
+        if (req.body[moneyName] !== undefined) {
+            if (req.body[moneyName] === 'on') {
+                elt[x].money = true;
+            }
+        }
+        else {
+            elt[x].money = false;
+
+        }
+
+    }
+
+
 }
 
 function uploadFileVendor(req, res) {
@@ -147,7 +186,7 @@ function uploadFileVendor(req, res) {
     fs.writeFile(__dirname + '/public/vendor-data/configuration/' + vendorName + "_config.json", JSON.stringify(config));
     fs.writeFile(__dirname + '/public/vendor-data/tooltip/' + vendorName + "_tooltip-config.json", JSON.stringify(options));
 
-    var callbackUrl = "/#!/vendor/" + vendorName;
+    var callbackUrl = "/#!/vendor/" + vendorName + "/options";
     res.redirect(callbackUrl);
 }
 
