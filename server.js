@@ -50,8 +50,6 @@ function uploadFileAEmployees(req, res) {
 }
 
 function uploadVendorOptions(req, res) {
-    console.log(req.body);
-    console.log(req);
     var tooltipConfig = JSON.parse(fs.readFileSync(__dirname + '/public/vendor-data/tooltip/' + req.body.vendorName + "_tooltip-config.json", 'utf8'));
     var futureFile = {};
     for (x in tooltipConfig) {
@@ -80,10 +78,13 @@ function uploadVendorOptions(req, res) {
             elt[x].money = false;
 
         }
+        futureFile[x] = elt[x];
 
     }
-
-
+    //console.log(futureFile);
+    fs.writeFile(__dirname + '/public/vendor-data/tooltip/' + req.body.vendorName + "_tooltip-config.json", JSON.stringify(futureFile));
+    var callbackUrl = "/#!/vendor/" + req.body.vendorName;
+    res.redirect(callbackUrl);
 }
 
 function uploadFileVendor(req, res) {
