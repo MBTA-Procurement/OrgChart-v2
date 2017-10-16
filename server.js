@@ -83,7 +83,8 @@ function uploadVendorOptions(req, res) {
         "field1": req.body.field1,
         "operation": req.body.operation,
         "field2": req.body.field2,
-        "format": req.body.operationFormat
+        "format": req.body.operationFormat,
+        "name": req.body.opName
     }
     ;
 
