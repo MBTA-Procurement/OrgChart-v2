@@ -85,14 +85,14 @@ function uploadVendorOptions(req, res) {
         "field2": req.body.field2,
         "format": req.body.operationFormat,
         "name": req.body.opName
-    }
-    ;
+    };
 
     //console.log(futureFile);
     fs.writeFile(__dirname + '/public/vendor-data/tooltip/' + req.body.vendorName + "_tooltip-config.json", JSON.stringify(futureFile));
     var callbackUrl = "/#!/vendor/" + req.body.vendorName;
-    res.redirect(callbackUrl);
-}
+    setTimeout(function(){
+        res.redirect(callbackUrl);
+    },1500);}
 
 function uploadFileVendor(req, res) {
     var vendorName = req.body.vendorName;
@@ -101,9 +101,9 @@ function uploadFileVendor(req, res) {
     var price = false;
     var quantity = false;
     var extra = 0;
-    var field1 = undefined;
-    var operation = undefined;
-    var field2 = undefined;
+    var field1 = "0";
+    var operation = "0";
+    var field2 = "0";
     var vars = [];
     if (req.body.year != undefined) {
         year = true;
@@ -183,15 +183,18 @@ function uploadFileVendor(req, res) {
     var myFile = req.file;
     var options = {};
     for (var p = 0; p < config.vars.length; p++) {
-
         options[config.vars[p].value] = {"display": true, "money": false, "view": "values"};
     }
+    options['operation'] = {"field1" : "0", "operation": "0", "field2":"0"}
     fs.rename(__dirname + '/public/uploads/' + myFile.filename, __dirname + '/public/vendor-data/' + vendorName + '.csv');
     fs.writeFile(__dirname + '/public/vendor-data/configuration/' + vendorName + "_config.json", JSON.stringify(config));
     fs.writeFile(__dirname + '/public/vendor-data/tooltip/' + vendorName + "_tooltip-config.json", JSON.stringify(options));
 
     var callbackUrl = "/#!/vendor/" + vendorName + "/options";
-    res.redirect(callbackUrl);
+    setTimeout(function(){
+        res.redirect(callbackUrl);
+
+    },1000);
 }
 
 function uploadFileADepartments(req, res) {
