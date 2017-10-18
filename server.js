@@ -185,7 +185,7 @@ function uploadFileVendor(req, res) {
     for (var p = 0; p < config.vars.length; p++) {
         options[config.vars[p].value] = {"display": true, "money": false, "view": "values"};
     }
-    options['operation'] = {"field1" : "0", "operation": "0", "field2":"0"}
+    options['operation'] = {"field1" : "0", "operation": "0", "field2":"0", "name":"Insert Name Here"};
     fs.rename(__dirname + '/public/uploads/' + myFile.filename, __dirname + '/public/vendor-data/' + vendorName + '.csv');
     fs.writeFile(__dirname + '/public/vendor-data/configuration/' + vendorName + "_config.json", JSON.stringify(config));
     fs.writeFile(__dirname + '/public/vendor-data/tooltip/' + vendorName + "_tooltip-config.json", JSON.stringify(options));
