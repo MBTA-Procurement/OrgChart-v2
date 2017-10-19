@@ -3,9 +3,7 @@ var app = express();
 var fs = require('fs');
 var bodyParser = require('body-parser');
 var multer = require('multer'); // npm install multer --save
-var underscore = require('underscore');
 var upload = multer({dest: __dirname + '/public/uploads'});
-var arrayToTree = require('array-to-tree');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -26,7 +24,12 @@ app.post("/api/upload/aemployees", upload.single('myFile'), uploadFileAEmployees
 app.post("/api/upload/kpi", upload.single('myFile'), uploadFileKPI);
 app.post("/api/upload/vendorData", upload.single('myFile'), uploadFileVendor);
 app.post("/api/upload/vendorOptions", upload.single('myFile'), uploadVendorOptions);
+app.delete("/api/remove", removeVendor);
 
+function removeVendor(req, res) {
+    var vendorName = req.body;
+    console.log('removing vendor');
+}
 
 function uploadFileOEmployees(req, res) {
     var myFile = req.file;
@@ -90,9 +93,10 @@ function uploadVendorOptions(req, res) {
     //console.log(futureFile);
     fs.writeFile(__dirname + '/public/vendor-data/tooltip/' + req.body.vendorName + "_tooltip-config.json", JSON.stringify(futureFile));
     var callbackUrl = "/#!/vendor/" + req.body.vendorName;
-    setTimeout(function(){
+    setTimeout(function () {
         res.redirect(callbackUrl);
-    },1500);}
+    }, 1500);
+}
 
 function uploadFileVendor(req, res) {
     var vendorName = req.body.vendorName;
@@ -185,16 +189,16 @@ function uploadFileVendor(req, res) {
     for (var p = 0; p < config.vars.length; p++) {
         options[config.vars[p].value] = {"display": true, "money": false, "view": "values"};
     }
-    options['operation'] = {"field1" : "0", "operation": "0", "field2":"0", "name":"Insert Name Here"};
+    options['operation'] = {"field1": "0", "operation": "0", "field2": "0", "name": "Insert Name Here"};
     fs.rename(__dirname + '/public/uploads/' + myFile.filename, __dirname + '/public/vendor-data/' + vendorName + '.csv');
     fs.writeFile(__dirname + '/public/vendor-data/configuration/' + vendorName + "_config.json", JSON.stringify(config));
     fs.writeFile(__dirname + '/public/vendor-data/tooltip/' + vendorName + "_tooltip-config.json", JSON.stringify(options));
 
     var callbackUrl = "/#!/vendor/" + vendorName + "/options";
-    setTimeout(function(){
+    setTimeout(function () {
         res.redirect(callbackUrl);
 
-    },1000);
+    }, 1000);
 }
 
 function uploadFileADepartments(req, res) {
